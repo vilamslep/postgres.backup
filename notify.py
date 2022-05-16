@@ -1,31 +1,48 @@
-from email import message
+from email.utils import formatdate
 from msilib.schema import MIME
-from ntpath import join
-from re import sub
-import smtplib
+from os.path import basename
+from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import smtplib
+
 
 class EmailUser:
     def __init__(self, login:str, password:str) -> None:
         self.login = login
         self.password = password
     
-
-
 class EmailLetter:
     user: EmailUser
-    message: MIMEText
+    message: MIMEMultipart
+    recivers: list[str]
 
-    def __init__(self, user:EmailUser, body:str, subject:str, name:str) -> None:
-        self.message = MIMEText(body)
-        self.message['Subject'] = subject
-        self.message['From'] = f'{name} <{user.login}>'
+    def __init__(self, user:EmailUser, body:str, subject:str, name:str, recivers:list, files:list=[]) -> None:
+        self.user = user
         
-    def send(self, recivers:list): 
-        server = self.get_smtp_server()
-
+        self.message = MIMEMultipart()
+        self.message['From'] = f'{name} <{user.login}>'
         self.message['To'] = ''.join(recivers)
-        for to in recivers:
+        self.message['Date'] = formatdate(localtime=True)
+        self.message['Subject'] = subject
+
+        self.recivers = recivers
+        self.message.attach(MIMEText(body))
+        
+        for f in files or []:
+            with open(f, "rb") as r:
+                part = MIMEApplication(
+                    r.read(),
+                    Name=basename(f)
+                )
+        # After the file is closed
+            part['Content-Disposition'] = 'attachment; filename="%s"' % basename(f)
+            self.message.attach(part)
+
+    def send(self): 
+        server = self.get_smtp_server()
+        
+        for to in self.recivers:
             server.sendmail(self.user.login, to, self.message.as_string())
         
         server.quit()
@@ -36,19 +53,4 @@ class EmailLetter:
         server.starttls()
         server.login(self.user.login, self.user.password)
 
-        return server    
-
-
-# def send_email(email: str, password: str, sender_name, to: list, subject: str, body:str ):
-#     server = smtplib.SMTP('smtp.yandex.ru', 587)
-#     server.ehlo() 
-#     server.starttls()
-#     server.login(email, password)
-#     msg = MIMEText(body)
-#     msg['Subject'] = subject
-#     msg['From'] = f'{sender_name} <{email}>'
-#     msg['To'] = ''.join(to)
-#     for t in to:
-#         server.sendmail( email, t, msg.as_string() )
-#     server.quit()
-
+        return server
