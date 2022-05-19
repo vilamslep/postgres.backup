@@ -72,7 +72,7 @@ def txt_custom_databases()->str:
     return '''
         SELECT datname, oid 
         FROM pg_database 
-        WHERE datname IN (\'bp-ip-new\', \'ut\', \'bp\');
+        WHERE NOT datname IN (\'postgres\', \'template0\', \'template1\');
         '''
 
 def txt_stat_tables() -> str:
