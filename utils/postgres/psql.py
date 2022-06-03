@@ -1,44 +1,31 @@
-from atexit import register
-from importlib.resources import path
-import subprocess, psycopg2, conf
+from operator import truediv
+import subprocess, psycopg2
 from contextlib import closing
-from network import conn as connection
+from configuration import config 
+from utils.postgres.database import Database
 
-
-class Database:
-    def __init__(self, name:str, oid:str) -> None:
-        self.name = name
-        self.oid = oid
-
-def databases() -> list[Database]:
+def databases(dbs_filter:list = []) -> list[Database]:
     dbs = list()
-    c = connection.new('postgres')
-
-    with closing(c.create_connection(psycopg2.connect)) as conn:
-        
+    with closing(config.get_connection(psycopg2.connect,'postgres')) as conn:
         with conn.cursor() as cursor:
-            cursor.execute( txt_custom_databases() )
+            cursor.execute( txt_custom_databases(dbs_filter) )
             fn = lambda x: Database(x[0], x[1])
             dbs = list(map( fn, cursor.fetchall() ))
 
     return dbs
 
 def excluded_tables(db: str) -> list[str]:
-    c = connection.new(db)
-
     tables = list()
-    with closing(c.create_connection(psycopg2.connect)) as conn:
-        
+    with closing(config.get_connection(psycopg2.connect,db)) as conn:
         with conn.cursor() as cursor:
             cursor.execute( txt_stat_tables() )
-            
             tables = [item[0] for item in cursor.fetchall() ] 
-    
+
     return tables
 
 def copy_binary(db:str, src:str, dst:str)->dict:
     
-    tool = conf.psql()
+    tool = config.psql()
     
     args = [tool, '--dbname', db]
 
@@ -68,12 +55,14 @@ def copy_binary(db:str, src:str, dst:str)->dict:
 
     return {"from":__from, "to": __to}
 
-def txt_custom_databases()->str:
-    return '''
-        SELECT datname, oid 
-        FROM pg_database 
-        WHERE NOT datname IN (\'postgres\', \'template0\', \'template1\');
-        '''
+def txt_custom_databases(dbs:list)->str:
+    if len(dbs) > 0:
+        txtdb = ','.join(list(map(lambda x: f'\'{x}\'',dbs)))
+        filter = f'WHERE datname IN( {txtdb} )'
+    else:
+        filter = 'WHERE NOT datname IN (\'postgres\', \'template1\', \'template0\')'
+
+    return 'SELECT datname, oid FROM pg_database {};'.format(filter)
 
 def txt_stat_tables() -> str:
     '''select tables which are bigger that 4 GB'''

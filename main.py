@@ -1,14 +1,20 @@
-from backup.backup import start
-from dotenv import load_dotenv
+from datetime import datetime
+from backup.backup import Backup
+from backup import Backup
+from configuration import load_setting
 from loguru import logger
-from backup.backup import send_email_error
-import os
-
 def main():
-    start()
 
+   Backup().run()
+   
 if __name__ == '__main__':
-    load_dotenv('env')
-    main()
-
+   now = datetime.now().strftime("%d-%m-%Y")
+   logger.add(f'log\\{now}.log')
+   logger.info('start script')
+   try:
+      load_setting('setting.yaml')
+      main()
+   except Exception as ex:
+      logger.error(ex)   
+   logger.info('finish script')
     

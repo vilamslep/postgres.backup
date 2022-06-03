@@ -1,7 +1,8 @@
-import subprocess, conf 
+import subprocess
+from configuration import config
 
 def dump(db: str, dst: str, output:str='', excluded_data: list=[]) -> bool:
-    tool = conf.pg_dump()
+    tool = config.pg_dump()
     
     args = [ tool, '--format', 'directory', '--no-password','--jobs', '4', 
     '--blobs', '--encoding', 'UTF8', '--verbose','--file', dst, '--dbname', db]

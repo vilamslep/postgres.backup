@@ -1,7 +1,8 @@
 import subprocess
-import conf
+from configuration import config
+
 def compress_dir(src:str, dst)->bool:
-    utill = conf.compress_tool()
+    utill = config.compress_tool()
     
     exit_code = subprocess.Popen( [ utill, 'a', '-tzip', '-mx5', dst, src],stdout=subprocess.PIPE).wait()
 
