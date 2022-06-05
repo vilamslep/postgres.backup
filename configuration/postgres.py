@@ -14,11 +14,13 @@ class Postgres:
         self.password       = conf['password']
         self.data_location  = conf['data_location']
 
+        self.load_envs()
+
     def load_envs(self):
         environ['PGUSER']       = self.user
         environ['PGPASSWORD']   = self.password
         environ['PGHOST']       = self.host
-        environ['PGPORT']       = self.port
+        environ['PGPORT']       = str(self.port)
     
     #fn_connect is function for creating connection with DBMS
     def create_connection(self, fn_connect, db: str):
