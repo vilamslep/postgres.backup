@@ -11,7 +11,8 @@ class BackupItem:
     status: str
     start_time: datetime
     end_time: datetime
-    size: float
+    size_database: float
+    size_backup: float
     backup_path: str
     details: str
 
@@ -91,6 +92,7 @@ class BackupItem:
             dst_name = basename(archive)
             self.backup_path = f'{targetdir}\\{dst_name}'
             fs.copy_file(archive, self.backup_path)
+            self.size_backup = fs.get_size(self.backup_path)
         except:
             trace = sys.exc_info()[2]
             raise Exception('can\'t copy the backup to target directory').with_traceback(trace)
@@ -120,7 +122,7 @@ class BackupItem:
     def __set_db_size(self):
         dbs_store = config.database_location()
         dbstore = f'{dbs_store}\\base\\{self.database.oid}'
-        self.size = fs.get_size(dbstore)
+        self.size_database = fs.get_size(dbstore)
 
     def __dump(self, lpath: str, exclude_tabls:list) -> None:
         fout = f'log\\{self.database.name}.log'

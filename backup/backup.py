@@ -49,13 +49,15 @@ class Backup:
                 
                 ii['name'] = i.database.name
                 ii['oid'] = i.database.oid
-                ii['status'] = i.status
+                ii['status'] = i.status.title()
                 ii['start_time'] = i.start_time.strftime('%H:%M:%S')
                 ii['end_time'] = i.end_time.strftime('%H:%M:%S')
                 if i.database.oid != '':
-                    ii['size'] = str((round(i.size / 1024 / 1024 / 1024, 2))) + ' GB'
+                    ii['size_database'] = str((round(i.size_database / 1024 / 1024 / 1024, 2))) + ' GB'
+                    ii['size_backup'] = str((round(i.size_backup / 1024 / 1024 / 1024, 2))) + ' GB'
                 else:
-                    ii['size'] = ''
+                    ii['size_database'] = ''
+                    ii['size_backup'] = ''
 
                 ii['backup'] = i.backup_path
                 ii['details'] = i.details

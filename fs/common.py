@@ -5,6 +5,9 @@ from os.path import isdir
 WIN_OS_PROGDATA = 'C:\Temp\postgres.backup'
 
 def get_size(start_path = '.'):
+    if not os.path.isdir(start_path):
+        return os.path.getsize(start_path)
+        
     total_size = 0
     for dirpath, dirnames, filenames in os.walk(start_path):
         ffn = lambda f: not os.path.islink(f) 
