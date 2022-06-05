@@ -41,7 +41,9 @@ def generate_directories(root:str, name:str, children:list=[])->dict:
     return locations
     
 def clear_old_backup(backup_path: str, count: int) -> bool:
-        
+
+    cur_dir = os.path.realpath('.')
+
     os.chdir(backup_path)
     
     files = os.listdir(backup_path)
@@ -55,6 +57,8 @@ def clear_old_backup(backup_path: str, count: int) -> bool:
                 remove(f'{backup_path}\\{file}')
             except:
                 return False
+    
+    os.chdir(cur_dir)
     
     return True
 

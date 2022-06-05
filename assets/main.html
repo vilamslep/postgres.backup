@@ -1,0 +1,145 @@
+<tbody>
+    <tr>
+        <td style="border:medium;font-family:'tahoma';font-size:12px;padding:0px">
+            <table style="border-collapse:collapse" width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    {% if error == True %}
+                    <tr style="height:70px">
+                        <td style="background-color:#fb9895;border:medium;font-family:'tahoma';font-size:16px;font-weight:bold;height:70px;padding:0 0 17px 15px;vertical-align:bottom;width:80%">
+                            PostgreSQL.Backup
+                        </td>
+                        <td style="background-color:#fb9895;border:medium;font-family:'tahoma';font-size:16px;font-weight:bold;height:70px;padding:0 0 17px 15px;vertical-align:bottom;width:80%">
+                            Error
+                        </td>
+                    </tr>
+                    {% elif warning == True %}
+                    <tr style="height:70px">
+                        <td style="background-color:#ffc000;border:medium;font-family:'tahoma';font-size:16px;font-weight:bold;height:70px;padding:0 0 17px 15px;vertical-align:bottom;width:80%">
+                            PostgreSQL.Backup
+                        </td>
+                        <td style="background-color:#ffc000;border:medium;font-family:'tahoma';font-size:16px;font-weight:bold;height:70px;padding:0 0 17px 15px;vertical-align:bottom;width:80%">
+                            Warning
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr style="height:70px">
+                        <td style="background-color:#00b050;border:medium;font-family:'tahoma';font-size:16px;font-weight:bold;height:70px;padding:0 0 17px 15px;vertical-align:bottom;width:80%">
+                            PostgreSQL.Backup
+                        </td>
+                        <td style="background-color:#00b050;border:medium;font-family:'tahoma';font-size:16px;font-weight:bold;height:70px;padding:0 0 17px 15px;vertical-align:bottom;width:80%">
+                            Success
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td colspan="2" style="border:medium;font-family:'tahoma';font-size:12px;padding:0px">
+                            <table class="44bb2ada66090ea7inner" style="border-collapse:collapse;margin:0px"
+                                width="100%" cellspacing="0" cellpadding="0" border="0">
+                                <tbody>
+                                    <tr style="height:17px">
+                                        <td class="d731a51ab6464075sessionDetails" colspan="9"
+                                            style="background-color:#f3f4f4;border-color:#a7a9ac;border-style:solid;border-width:1px 1px 0 1px;color:#626365;font-family:'tahoma';font-size:16px;height:35px;padding:5px 0 0 15px;vertical-align:middle">
+                                            {{day_of_week}}, {{day_of_month}} {{month}} {{year}}</td>
+                                    </tr>
+                                    <tr style="height:17px">
+                                        <td style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top;width:1%">
+                                            <b>Success</b></td>
+                                        <td
+                                            style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top;width:85px">
+                                            <b>Warning</b></td>
+                                        <td
+                                            style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top;width:85px">
+                                            <b>Error</b></td>
+                                    </tr>
+                                    <tr style="height:17px">
+                                        <td
+                                            style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            {{success_count}}</td>
+                                        <td
+                                            style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            {{warning_count}}</td>
+                                        <td
+                                            style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            {{error_count}}</td>
+                                    </tr>
+                                    {% for task in tasks %}
+                                    <tr style="height:17px">
+                                        <td colspan="9"
+                                            style="background-color:#f3f4f4;border:1px solid #a7a9ac;color:#626365;font-family:'tahoma';font-size:16px;height:35px;padding:5px 0 0 15px;vertical-align:middle">
+                                            {{task['name']}}
+                                        </td>
+                                    </tr>
+                                    <tr class="1b6f24de29b2a429processObjectsHeader" style="height:23px">
+                                        <td
+                                            style="background-color:#e3e3e3;border-color:#a7a9ac;border-style:none solid solid solid;border-width:medium 1px 1px 1px;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            <b>Name</b></td>
+                                        <td
+                                            style="background-color:#e3e3e3;border-color:#a7a9ac;border-style:none solid solid solid;border-width:medium 1px 1px 1px;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            <b>OID</b></td>
+                                        <td
+                                            style="background-color:#e3e3e3;border-color:#a7a9ac;border-style:none solid solid solid;border-width:medium 1px 1px 1px;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            <b>Status</b></td>
+                                        <td
+                                            style="background-color:#e3e3e3;border-color:#a7a9ac;border-style:none solid solid solid;border-width:medium 1px 1px 1px;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            <b>Start time</b></td>
+                                        <td
+                                            style="background-color:#e3e3e3;border-color:#a7a9ac;border-style:none solid solid solid;border-width:medium 1px 1px 1px;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            <b>End time</b></td>
+                                        <td
+                                            style="background-color:#e3e3e3;border-color:#a7a9ac;border-style:none solid solid solid;border-width:medium 1px 1px 1px;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            <b>Size</b></td>
+                                        <td
+                                            style="background-color:#e3e3e3;border-color:#a7a9ac;border-style:none solid solid solid;border-width:medium 1px 1px 1px;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            <b>Backup</b></td>
+                                        <td
+                                            style="background-color:#e3e3e3;border-color:#a7a9ac;border-style:none solid solid solid;border-width:medium 1px 1px 1px;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                            <b>Details</b></td>
+                                    </tr>
+                                        {% for item in task['items'] %}
+                                        <tr style="height:17px">
+                                            <td
+                                                style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                                {{item['name']}}</td>
+                                            <td style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                                {{item['oid']}}</td>
+                                            <td
+                                                style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                                {% if item['status'] == 'error' %}
+                                                <span style="color:#ff0000">{{item['status']}}</span>
+                                                {% elif item['status'] == 'warning' %}
+                                                <span style="color:#ffc000">{{item['status']}}</span>
+                                                {% else %}
+                                                <span style="color:#00b050">{{item['status']}}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td
+                                                style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                                {{item['start_time']}}</td>
+                                            <td
+                                                style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                                {{item['end_time']}}</td>
+                                            <td
+                                                style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                                {{item['size']}}</td>
+                                            <td
+                                                style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                                {{item['backup']}}</td>
+                                            <td
+                                                style="border:1px solid #a7a9ac;font-family:'tahoma';font-size:12px;padding:2px 3px 2px 3px;vertical-align:top">
+                                                <span class="d9c1fd26558bdb71small_label" style="font-size:10px">{{item['details']}}</td>
+                                        </tr>    
+                                        {% endfor %}
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+</tbody>

@@ -1,3 +1,4 @@
+from datetime import datetime
 from os.path import basename
 from utils.postgres import Database, excluded_tables, dump, copy_binary 
 from utils import compress_dir
@@ -7,19 +8,38 @@ from loguru import logger
 
 class BackupItem:
     database: Database   
+    status: str
+    start_time: datetime
+    end_time: datetime
+    size: float
+    backup_path: str
+    details: str
 
     def __init__(self, database: Database) -> None:
         self.database = database
 
     def backup(self, tempdir: str, targetdir: str ) -> None:
         if len(self.database.oid) == 0:
+            self.status = 'warning'
+            self.details = 'oid is empty. Database isn\'t found in server'
             return
+        self.start_time = datetime.now()
+        self.__set_db_size()
+        self.details = ''
         try:    
             self.__backup(tempdir, targetdir)
         except Exception:
-            trace = sys.exc_info()[2]
-            raise Exception(f'backup of {self.database.name} is failed').with_traceback(trace)
+            exc_info = sys.exc_info()
+            
+            self.details = exc_info[1]
+            self.status = 'error'
+            self.end_time = datetime.now()
+
+            raise Exception(f'backup of {self.database.name} is failed').with_traceback(exc_info[2])
         
+        self.status = 'success'
+        self.end_time = datetime.now()
+
     def __backup(self, tempdir: str, targetdir: str ) -> bool:
         logger.info('checking space in template directory')
         
@@ -69,7 +89,8 @@ class BackupItem:
         logger.info('coping backup to target directory')
         try:
             dst_name = basename(archive)
-            fs.copy_file(archive, f'{targetdir}\\{dst_name}')
+            self.backup_path = f'{targetdir}\\{dst_name}'
+            fs.copy_file(archive, self.backup_path)
         except:
             trace = sys.exc_info()[2]
             raise Exception('can\'t copy the backup to target directory').with_traceback(trace)
@@ -96,6 +117,10 @@ class BackupItem:
             raise Exception("checking free space is failed").with_traceback(trace)
 
         return ok
+    def __set_db_size(self):
+        dbs_store = config.database_location()
+        dbstore = f'{dbs_store}\\base\\{self.database.oid}'
+        self.size = fs.get_size(dbstore)
 
     def __dump(self, lpath: str, exclude_tabls:list) -> None:
         fout = f'log\\{self.database.name}.log'

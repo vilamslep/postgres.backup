@@ -3,6 +3,7 @@ from backup.backup import Backup
 from backup import Backup
 from configuration import load_setting
 from loguru import logger
+
 def main():
 
    Backup().run()
@@ -15,6 +16,8 @@ if __name__ == '__main__':
       load_setting('setting.yaml')
       main()
    except Exception as ex:
-      logger.error(ex)   
+      logger.error(ex)
+      exit(1)
+         
    logger.info('finish script')
     

@@ -17,7 +17,7 @@ class Task:
         self.kind = kind
         self.keep_count = keep_count
 
-        dbs_in_server =  databases(dbs)
+        dbs_in_server = databases(dbs)
         db_as_obs = self.__add_which_not_found(dbs, dbs_in_server)
         
         self.items = []

@@ -4,3 +4,4 @@ env
 .vscode
 *.log
 *test*
+setting.yaml
